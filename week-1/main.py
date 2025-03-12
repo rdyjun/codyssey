@@ -1,3 +1,5 @@
+print('Hello Mars')
+
 try:
     f = open('week-1/mission_computer_main.log', 'r', encoding = 'utf-8');
     # print(f.read()); // 정방향
