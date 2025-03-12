@@ -5,17 +5,7 @@ print('Hello Mars')
 
 isProblem = False
 
-def run():
-    problem_log_file, analysis_file, logs = file_manager.getFiles()
-    log_content = logs.read()
-    log_array = log_content.strip().split('\n')
-    del log_array[0]
-
-    # for log in log_array: # 정방향
-    #     print(log)
-    for log in reversed(log_array):
-        print(log)
-
+def find_problem(problem_log_file, log_array):
     problem = []    # problem log를 저장하기 위한 배열
     reason = ''
 
@@ -30,8 +20,23 @@ def run():
         if isProblem:
             problem_log_file.write(log_array[index] + '\n')
             problem.append(log_array[index])
+
+    return (problem, reason)
+
+def run():
+    problem_log_file, analysis_file, logs = file_manager.getFiles()
+    log_content = logs.read()
+    log_array = log_content.strip().split('\n')
+    del log_array[0]
+
+    # for log in log_array: # 정방향
+    #     print(log)
+    for log in reversed(log_array):
+        print(log)
+
+    problem, reason = find_problem(problem_log_file, log_array) # 문제 찾기
         
-    analysis_writer.write(analysis_file, problem, reason)
+    analysis_writer.write(analysis_file, problem, reason)       # 문제 분석 및 서류 작성하기
     
     file_manager.closeAll()
 
