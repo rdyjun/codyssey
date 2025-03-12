@@ -1,13 +1,12 @@
 import analysis_writer # analysis_writer.py 직접 구현
+import file_manager # file_manager.py 직접 구현
 
 print('Hello Mars')
 
 isProblem = False
 
 try:
-    problem_log_file = open('week-1/problem.log', 'w', encoding = 'utf-8')
-    analysis_file = open('week-1/log_analysis.md', 'w', encoding = 'utf-8')
-    logs = open('week-1/mission_computer_main.log', 'r', encoding = 'utf-8')
+    problem_log_file, analysis_file, logs = file_manager.getFiles()
     log_content = logs.read()
     log_array = log_content.strip().split('\n')
     del log_array[0]
@@ -34,9 +33,7 @@ try:
         
     analysis_writer.write(analysis_file, problem, reason)
     
-    problem_log_file.close()
-    analysis_file.close()
-    logs.close()
+    file_manager.closeAll()
 
 except FileNotFoundError:
     print("파일을 찾을 수 없습니다.")
