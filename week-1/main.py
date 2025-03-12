@@ -5,7 +5,7 @@ print('Hello Mars')
 
 isProblem = False
 
-try:
+def run():
     problem_log_file, analysis_file, logs = file_manager.getFiles()
     log_content = logs.read()
     log_array = log_content.strip().split('\n')
@@ -35,9 +35,4 @@ try:
     
     file_manager.closeAll()
 
-except FileNotFoundError:
-    print("파일을 찾을 수 없습니다.")
-except UnicodeDecodeError:
-    print("파일을 UTF-8로 디코딩할 수 없습니다. 다른 인코딩을 사용해 보세요.")
-except Exception as e:
-    print(f"예상치 못한 오류가 발생했습니다: {e}")
+run()
