@@ -4,7 +4,7 @@
 
 ## 문제 원인
 
-Oxygen tank unstable.
+산소 탱크 불안정
 
 ## 문제 로그
 

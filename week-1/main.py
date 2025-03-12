@@ -1,4 +1,4 @@
-import explosion_analysis # explosion_analysis.py 직접 구현
+import analysis_writer # analysis_writer.py 직접 구현
 
 print('Hello Mars')
 
@@ -32,7 +32,7 @@ try:
             problem_log_file.write(log_array[index] + '\n')
             problem.append(log_array[index])
         
-    explosion_analysis.analysis(analysis_file, problem, reason)
+    analysis_writer.write(analysis_file, problem, reason)
     
     problem_log_file.close()
     analysis_file.close()
