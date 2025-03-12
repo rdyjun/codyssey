@@ -11,7 +11,6 @@ def write(analysis_file, problem, reason_log):
 
     # 문제 타입 확인
     problem_type = problem_types['UNKNOWN']
-    print(problem)
     if 'Oxygen tank explosion' in joined_problem:
         problem_type = problem_types['OXYGEN_TANK_EXPLOSION']
 
