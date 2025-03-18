@@ -27,6 +27,10 @@ def main():
             for content in desc_inventory_list:
                 binary_file.write(content.encode('utf-8') + b'\n')
 
+        with open('week-2/Mars_Base_Inventory_List.bin', 'rb') as binary_file:
+            print('바이너리 파일 출력')
+            print(binary_file.read().decode('utf-8'))
+
 
 def print_inventory_list(header, inventory_list):
     print(header)
