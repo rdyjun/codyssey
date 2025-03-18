@@ -22,6 +22,12 @@ def main():
             for content in top_rate_flammability:
                 danger_file.write(content + '\n')
 
+        with open('week-2/Mars_Base_Inventory_List.bin', 'wb') as binary_file:
+            binary_file.write(header.encode('utf-8') + b'\n')
+            for content in desc_inventory_list:
+                binary_file.write(content.encode('utf-8') + b'\n')
+
+
 def print_inventory_list(header, inventory_list):
     print(header)
     for content in inventory_list:
