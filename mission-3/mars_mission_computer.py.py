@@ -1,4 +1,5 @@
 import random
+from datetime import datetime
 
 class EnvValues:
     mars_base_internal_temperature: int # 18 ~ 30
@@ -34,6 +35,8 @@ class DummySensor:
 
     def get_env(self):
         with open('./mission-3/env.log', 'w') as f:
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            f.write(f"Date: {current_time}\n\n")
             for field_name, value in self.env_values.get_items():
                 if field_name.startswith('_'):  # private 속성 제외
                     continue
