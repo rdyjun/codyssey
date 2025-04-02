@@ -73,14 +73,13 @@ class MissionComputer:
 
     def get_sensor_data(self):
         start_time = time.time()
+        count = 0
+        ds = DummySensor()
 
         while (True):
-            ds = DummySensor()
             ds.set_env()
             env_values = ds.get_env()
             self.print_json(env_values, 1)
-
-            count = 0
 
             if time.time() - start_time >= 300:
                 self.env_values_mean['mars_base_external_temperature'] += env_values['mars_base_external_temperature']
@@ -94,9 +93,6 @@ class MissionComputer:
                 print(f'평균 값 출력: ')
                 self.print_json(self.env_values_mean, count)
                 start_time = time.time()
-                
-                self.get_sensor_data()
-                
 
             time.sleep(5)
 
