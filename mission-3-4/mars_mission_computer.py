@@ -1,5 +1,6 @@
 import random
 from datetime import datetime
+import time
 
 INTERNAL_TEMPERATURE_RANGE: tuple[int, int] = (18, 30)
 EXTERNAL_TEMPERATURE_RANGE: tuple[int, int] = (0, 21)
@@ -10,12 +11,12 @@ INTERNAL_OXYGEN_RANGE: tuple[int, int] = (4, 7)
 
 class DummySensor:
     env_values = {
-        "mars_base_internal_temperature": None,  # 18 ~ 30
-        "mars_base_external_temperature": None,  # 0 ~ 21
-        "mars_base_internal_humidity": None,     # 50 ~ 60
-        "mars_base_external_illuminance": None,  # 500 ~ 715
-        "mars_base_internal_co2": None,          # 0.02 ~ 0.1
-        "mars_base_internal_oxygen": None        # 4 ~ 7
+        'mars_base_internal_temperature': None,  # 18 ~ 30
+        'mars_base_external_temperature': None,  # 0 ~ 21
+        'mars_base_internal_humidity': None,     # 50 ~ 60
+        'mars_base_external_illuminance': None,  # 500 ~ 715
+        'mars_base_internal_co2': None,          # 0.02 ~ 0.1
+        'mars_base_internal_oxygen': None        # 4 ~ 7
     }
 
     isInitialized = False
@@ -34,13 +35,13 @@ class DummySensor:
             self.set_env()
 
         with open('./mission-3/env.log', 'w') as f:
-            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            f.write(f"Date: {current_time}\n\n")
+            current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            f.write(f'Date: {current_time}\n\n')
             for field_name, value in self.env_values.items():
                 if field_name.startswith('_'):  # private 속성 제외
                     continue
 
-                f.write(f"{field_name}: {value}\n")
+                f.write(f'{field_name}: {value}\n')
         return self.env_values
 
 class MarsMissionComputer:
@@ -48,6 +49,40 @@ class MarsMissionComputer:
         self.internal_temperature_range = (18, 30)  # (min, max) 튜플로 온도 범위 정의
         self.mars_base_internal_temperature = random.randint(*self.internal_temperature_range)
 
-ds = DummySensor()
-ds.set_env()
-print(ds.get_env())
+def mission_3():
+    ds = DummySensor()
+    ds.set_env()
+    print(ds.get_env())
+
+class MissionComputer:
+    env_values = {
+        'mars_base_internal_temperature': None,
+        'mars_base_external_temperature': None,
+        'mars_base_internal_humidity': None,
+        'mars_base_external_illuminance': None,
+        'mars_base_internal_co2': None,
+        'mars_base_internal_oxygen': None
+    }
+
+    def print_json(self, env_values):
+        print('{\n')
+        for i, (field_name, value) in enumerate(env_values.items()):
+            print(f"    '{field_name}': {value}", end='')
+            if i < len(env_values) - 1:
+                print(',')
+        print('\n}')
+
+    def get_sensor_data(self):
+        ds = DummySensor()
+        ds.set_env()
+        self.print_json(ds.get_env())
+
+def mission_4():
+    RunComputer = MissionComputer()
+
+    while (True):
+        RunComputer.get_sensor_data()
+
+        time.sleep(5)
+
+mission_4()
