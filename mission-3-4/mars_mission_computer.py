@@ -54,36 +54,59 @@ def mission_3():
     print(ds.get_env())
 
 class MissionComputer:
-    env_values = {
-        'mars_base_internal_temperature': None,
-        'mars_base_external_temperature': None,
-        'mars_base_internal_humidity': None,
-        'mars_base_external_illuminance': None,
-        'mars_base_internal_co2': None,
-        'mars_base_internal_oxygen': None
+    env_values_mean = {
+        'mars_base_internal_temperature': 0,
+        'mars_base_external_temperature': 0,
+        'mars_base_internal_humidity': 0,
+        'mars_base_external_illuminance': 0,
+        'mars_base_internal_co2': 0.0,
+        'mars_base_internal_oxygen': 0
     }
 
-    def print_json(self, env_values):
+    def print_json(self, env_values, divider):
         print('{\n')
         for i, (field_name, value) in enumerate(env_values.items()):
-            print(f"    '{field_name}': {value}", end='')
+            print(f"    '{field_name}': {value / divider}", end='')
             if i < len(env_values) - 1:
                 print(',')
         print('\n}')
 
     def get_sensor_data(self):
-        ds = DummySensor()
-        ds.set_env()
-        self.print_json(ds.get_env())
+        start_time = time.time()
+
+        while (True):
+            ds = DummySensor()
+            ds.set_env()
+            env_values = ds.get_env()
+            self.print_json(env_values, 1)
+
+            count = 0
+
+            if time.time() - start_time >= 300:
+                self.env_values_mean['mars_base_external_temperature'] += env_values['mars_base_external_temperature']
+                self.env_values_mean['mars_base_internal_temperature'] += env_values['mars_base_internal_temperature']
+                self.env_values_mean['mars_base_internal_humidity'] += env_values['mars_base_internal_humidity']
+                self.env_values_mean['mars_base_external_illuminance'] += env_values['mars_base_external_illuminance']
+                self.env_values_mean['mars_base_internal_co2'] += env_values['mars_base_internal_co2']
+                self.env_values_mean['mars_base_internal_oxygen'] += env_values['mars_base_internal_oxygen']
+                count += 1
+
+                print(f'평균 값 출력: ')
+                self.print_json(self.env_values_mean, count)
+                start_time = time.time()
+                
+                self.get_sensor_data()
+                
+
+            time.sleep(5)
 
 def mission_4():
     RunComputer = MissionComputer()
+    RunComputer.get_sensor_data()
 
-    while (True):
-        RunComputer.get_sensor_data()
-        time.sleep(5)
 
 try:
     mission_4()
 except KeyboardInterrupt:       # Ctrl + C 로 종료
+    print()
     print('System stoped….')
