@@ -1,43 +1,42 @@
 import random
 from datetime import datetime
 
-class EnvValues:
-    mars_base_internal_temperature: int # 18 ~ 30
-    mars_base_external_temperature: int # 0 ~ 21
-    mars_base_internal_humidity: int    # 50 ~ 60
-    mars_base_external_illuminance: int # 500 ~ 715
-    mars_base_internal_co2: float       # 0.02 ~ 0.1
-    mars_base_internal_oxygen: int      # 4 ~ 7
-
-    _internal_temperature_range: tuple[int, int] = (18, 30)
-    _external_temperature_range: tuple[int, int] = (0, 21)
-    _internal_humidity_range: tuple[int, int] = (50, 60)
-    _external_illuminance_range: tuple[int, int] = (500, 715)
-    _internal_co2_range: tuple[int, int] = (0.02, 0.1)
-    _internal_oxygen_range: tuple[int, int] = (4, 7)
-
-    def random(self):
-        self.mars_base_internal_temperature = random.randint(*self._internal_temperature_range)
-        self.mars_base_external_temperature = random.randint(*self._external_temperature_range)
-        self.mars_base_internal_humidity = random.randint(*self._internal_humidity_range)
-        self.mars_base_external_illuminance = random.randint(*self._external_illuminance_range)
-        self.mars_base_internal_co2 = random.uniform(*self._internal_co2_range)
-        self.mars_base_internal_oxygen = random.randint(*self._internal_oxygen_range)
-    def get_items(self):
-        return self.__dict__.items()
+INTERNAL_TEMPERATURE_RANGE: tuple[int, int] = (18, 30)
+EXTERNAL_TEMPERATURE_RANGE: tuple[int, int] = (0, 21)
+INTERNAL_HUMIDITY_RANGE: tuple[int, int] = (50, 60)
+EXTERNAL_ILLUMINANCE_RANGE: tuple[int, int] = (500, 715)
+INTERNAL_CO2_RANGE: tuple[int, int] = (0.02, 0.1)
+INTERNAL_OXYGEN_RANGE: tuple[int, int] = (4, 7)
 
 class DummySensor:
-    env_values: EnvValues
+    env_values = {
+        "mars_base_internal_temperature": None,  # 18 ~ 30
+        "mars_base_external_temperature": None,  # 0 ~ 21
+        "mars_base_internal_humidity": None,     # 50 ~ 60
+        "mars_base_external_illuminance": None,  # 500 ~ 715
+        "mars_base_internal_co2": None,          # 0.02 ~ 0.1
+        "mars_base_internal_oxygen": None        # 4 ~ 7
+    }
+
+    isInitialized = False
 
     def set_env(self):
-        self.env_values = EnvValues()
-        self.env_values.random()
+        self.env_values['mars_base_internal_temperature'] = random.randint(*INTERNAL_TEMPERATURE_RANGE)
+        self.env_values['mars_base_external_temperature'] = random.randint(*EXTERNAL_TEMPERATURE_RANGE)
+        self.env_values['mars_base_internal_humidity'] = random.randint(*INTERNAL_HUMIDITY_RANGE)
+        self.env_values['mars_base_external_illuminance'] = random.randint(*EXTERNAL_ILLUMINANCE_RANGE)
+        self.env_values['mars_base_internal_co2'] = random.uniform(*INTERNAL_CO2_RANGE)
+        self.env_values['mars_base_internal_oxygen'] = random.randint(*INTERNAL_OXYGEN_RANGE)
+        self.isInitialized = True;
 
     def get_env(self):
+        if not self.isInitialized:
+            self.set_env()
+
         with open('./mission-3/env.log', 'w') as f:
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             f.write(f"Date: {current_time}\n\n")
-            for field_name, value in self.env_values.get_items():
+            for field_name, value in self.env_values.items():
                 if field_name.startswith('_'):  # private 속성 제외
                     continue
 
