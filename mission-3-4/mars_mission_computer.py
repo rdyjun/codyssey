@@ -81,7 +81,9 @@ def mission_4():
 
     while (True):
         RunComputer.get_sensor_data()
-
         time.sleep(5)
 
-mission_4()
+try:
+    mission_4()
+except KeyboardInterrupt:       # Ctrl + C 로 종료
+    print('System stoped….')
