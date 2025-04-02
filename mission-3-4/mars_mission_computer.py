@@ -1,5 +1,4 @@
 import random
-from datetime import datetime
 import time
 
 INTERNAL_TEMPERATURE_RANGE: tuple[int, int] = (18, 30)
@@ -34,8 +33,8 @@ class DummySensor:
         if not self.isInitialized:
             self.set_env()
 
-        with open('./mission-3/env.log', 'w') as f:
-            current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        with open('./mission-3-4/env.log', 'w') as f:
+            current_time = time.strftime('%Y-%m-%d %H:%M:%S')
             f.write(f'Date: {current_time}\n\n')
             for field_name, value in self.env_values.items():
                 if field_name.startswith('_'):  # private 속성 제외
