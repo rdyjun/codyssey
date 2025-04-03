@@ -54,6 +54,7 @@ def mission_3():
     print(ds.get_env())
 
 class MissionComputer:
+    env_values = {}
     env_values_mean = {
         'mars_base_internal_temperature': 0,
         'mars_base_external_temperature': 0,
@@ -63,11 +64,11 @@ class MissionComputer:
         'mars_base_internal_oxygen': 0
     }
 
-    def print_json(self, env_values, divider):
+    def print_json(self, divider):
         print('{\n')
-        for i, (field_name, value) in enumerate(env_values.items()):
+        for i, (field_name, value) in enumerate(self.env_values.items()):
             print(f"    '{field_name}': {value / divider}", end='')
-            if i < len(env_values) - 1:
+            if i < len(self.env_values) - 1:
                 print(',')
         print('\n}')
 
@@ -78,7 +79,7 @@ class MissionComputer:
             ds = DummySensor()
             ds.set_env()
             env_values = ds.get_env()
-            self.print_json(env_values, 1)
+            self.print_json(1)
 
             count = 0
 
