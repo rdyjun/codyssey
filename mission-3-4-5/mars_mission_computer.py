@@ -114,22 +114,22 @@ class MissionComputer:
             first_line = f.readline();
             second_line = f.readline();
 
-            if first_line.startswith("computer_info"):
+            if first_line.startswith('computer_info'):
                 self.read_info_list = first_line[14:].strip().split(',')
             
-            if first_line.startswith("computer_load"):
+            if first_line.startswith('computer_load'):
                 self.read_load_list = first_line[14:].strip().split(',')
 
-            if second_line.startswith("computer_info"):
+            if second_line.startswith('computer_info'):
                 self.read_info_list = second_line[14:].strip().split(',')
 
-            if second_line.startswith("computer_load"):
+            if second_line.startswith('computer_load'):
                 self.read_load_list = second_line[14:].strip().split(',')
 
     def print_json(self, env_value):
         print('{')
         for i, (field_name, value) in enumerate(env_value.items()):
-            print(f"    '{field_name}': {value}", end='')
+            print(f"    '{field_name}': '{value}'", end='')
             if i < len(env_value) - 1:
                 print(',')
         print('\n}')
