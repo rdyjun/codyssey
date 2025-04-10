@@ -52,11 +52,6 @@ class MarsMissionComputer:
         self.internal_temperature_range = (18, 30)  # (min, max) 튜플로 온도 범위 정의
         self.mars_base_internal_temperature = random.randint(*self.internal_temperature_range)
 
-def mission_3():
-    ds = DummySensor()
-    ds.set_env()
-    print(ds.get_env())
-
 class OsManager:
 
     @staticmethod
@@ -201,6 +196,11 @@ class MissionComputer:
         
         self.print_json(usage_info)
 
+def mission_3():
+    ds = DummySensor()
+    ds.set_env()
+    print(ds.get_env())
+
 def mission_4():
     RunComputer = MissionComputer()
     try:
@@ -208,7 +208,6 @@ def mission_4():
     except KeyboardInterrupt:       # Ctrl + C 로 종료
         print()
         print('System stoped….')
-
 
 def mission_5():
     runComputer = MissionComputer()
