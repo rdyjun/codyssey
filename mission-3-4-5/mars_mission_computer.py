@@ -1,6 +1,10 @@
 import random
 import time
 
+import os
+import platform
+import psutil
+
 INTERNAL_TEMPERATURE_RANGE: tuple[int, int] = (18, 30)
 EXTERNAL_TEMPERATURE_RANGE: tuple[int, int] = (0, 21)
 INTERNAL_HUMIDITY_RANGE: tuple[int, int] = (50, 60)
@@ -33,7 +37,7 @@ class DummySensor:
         if not self.isInitialized:
             self.set_env()
 
-        with open('./mission-3-4/env.log', 'w') as f:
+        with open('./mission-3-4-5/env.log', 'w') as f:
             current_time = time.strftime('%Y-%m-%d %H:%M:%S')
             f.write(f'Date: {current_time}\n\n')
             for field_name, value in self.env_values.items():
@@ -64,13 +68,20 @@ class MissionComputer:
         'mars_base_internal_oxygen': 0
     }
 
-    def print_json(self, divider):
-        print('{\n')
-        for i, (field_name, value) in enumerate(self.env_values.items()):
-            print(f"    '{field_name}': {value / divider}", end='')
-            if i < len(self.env_values) - 1:
+    def print_json(self, env_value):
+        print('{')
+        for i, (field_name, value) in enumerate(env_value.items()):
+            print(f"    '{field_name}': {value}", end='')
+            if i < len(env_value) - 1:
                 print(',')
         print('\n}')
+
+    def get_mean(self, divider):
+        mean = {}
+        for _, (field_name, value) in enumerate(self.env_values.items()):
+            mean[field_name] = value / divider
+
+        return mean
 
     def get_sensor_data(self):
         start_time = time.time()
@@ -79,31 +90,61 @@ class MissionComputer:
 
         while (True):
             ds.set_env()
-            env_values = ds.get_env()
-            self.print_json(1)
+            self.env_values = ds.get_env()
+            
+            self.print_json(self.env_values)
 
             if time.time() - start_time >= 300:
-                self.env_values_mean['mars_base_external_temperature'] += env_values['mars_base_external_temperature']
-                self.env_values_mean['mars_base_internal_temperature'] += env_values['mars_base_internal_temperature']
-                self.env_values_mean['mars_base_internal_humidity'] += env_values['mars_base_internal_humidity']
-                self.env_values_mean['mars_base_external_illuminance'] += env_values['mars_base_external_illuminance']
-                self.env_values_mean['mars_base_internal_co2'] += env_values['mars_base_internal_co2']
-                self.env_values_mean['mars_base_internal_oxygen'] += env_values['mars_base_internal_oxygen']
+                self.env_values_mean['mars_base_external_temperature'] += self.env_values['mars_base_external_temperature']
+                self.env_values_mean['mars_base_internal_temperature'] += self.env_values['mars_base_internal_temperature']
+                self.env_values_mean['mars_base_internal_humidity'] += self.env_values['mars_base_internal_humidity']
+                self.env_values_mean['mars_base_external_illuminance'] += self.env_values['mars_base_external_illuminance']
+                self.env_values_mean['mars_base_internal_co2'] += self.env_values['mars_base_internal_co2']
+                self.env_values_mean['mars_base_internal_oxygen'] += self.env_values['mars_base_internal_oxygen']
                 count += 1
 
                 print(f'평균 값 출력: ')
-                self.print_json(self.env_values_mean, count)
+                mean_values = self.get_mean()
+                self.print_json(mean_values)
                 start_time = time.time()
 
             time.sleep(5)
 
+    def get_mission_computer_info(self):
+        computer_info = {}
+        computer_info['os_name'] = platform.system()
+        computer_info['os_version'] = platform.version()
+        computer_info['cpu_cores'] = os.cpu_count()
+        computer_info['cpu_type'] = platform.processor()
+
+        memory_info = psutil.virtual_memory() # GB 단위
+
+        computer_info['total_memory'] = memory_info.total / (1024 ** 3)  # 바이트 → GB 변환
+
+        self.print_json(computer_info)
+
+    def get_mission_computer_load(self):
+        usage_info = {}
+
+        memory_info = psutil.virtual_memory() # GB 단위
+
+        usage_info['cpu_usage'] = psutil.cpu_percent(interval=1)
+        usage_info['memory_usage'] = memory_info.percent
+        
+        self.print_json(usage_info)
+
 def mission_4():
     RunComputer = MissionComputer()
-    RunComputer.get_sensor_data()
+    try:
+        RunComputer.get_sensor_data()
+    except KeyboardInterrupt:       # Ctrl + C 로 종료
+        print()
+        print('System stoped….')
 
 
-try:
-    mission_4()
-except KeyboardInterrupt:       # Ctrl + C 로 종료
-    print()
-    print('System stoped….')
+def mission_5():
+    runComputer = MissionComputer()
+    runComputer.get_mission_computer_info()
+    runComputer.get_mission_computer_load()
+
+mission_5()
