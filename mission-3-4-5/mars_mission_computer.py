@@ -57,6 +57,38 @@ def mission_3():
     ds.set_env()
     print(ds.get_env())
 
+class OsManager:
+
+    @staticmethod
+    def get_os_name():
+        return platform.system()
+
+    @staticmethod
+    def get_os_version():
+        return platform.version()
+    
+    @staticmethod
+    def get_cpu_cores():
+        return os.cpu_count()
+    
+    @staticmethod
+    def get_cpu_type():
+        return platform.processor()
+    
+    @staticmethod
+    def get_memory_size():
+        memory_info = psutil.virtual_memory() # GB 단위
+        return memory_info.total / (1024 ** 3)  # 바이트 → GB 변환
+    
+    @staticmethod
+    def get_memory_usage():
+        memory_info = psutil.virtual_memory() # GB 단위
+        return memory_info.percent
+    
+    @staticmethod
+    def get_cpu_usage():
+        return psutil.cpu_percent(interval=1)
+
 class MissionComputer:
     env_values = {}
     env_values_mean = {
@@ -67,6 +99,37 @@ class MissionComputer:
         'mars_base_internal_co2': 0.0,
         'mars_base_internal_oxygen': 0
     }
+
+    read_info_list = []
+    read_load_list = []
+
+    def __init__(self):
+        self.runable = {
+            'os_name': OsManager.get_os_name,
+            'os_version': OsManager.get_os_version,
+            'cpu_cores': OsManager.get_cpu_cores,
+            'cpu_type': OsManager.get_cpu_type,
+            'memory_size': OsManager.get_memory_size,
+
+            'memory_usage': OsManager.get_memory_usage,
+            'cpu_usage': OsManager.get_cpu_usage
+        }
+
+        with open('mission-3-4-5/setting.txt', 'r') as f:
+            first_line = f.readline();
+            second_line = f.readline();
+
+            if first_line.startswith("computer_info"):
+                self.read_info_list = first_line[14:].strip().split(',')
+            
+            if first_line.startswith("computer_load"):
+                self.read_load_list = first_line[14:].strip().split(',')
+
+            if second_line.startswith("computer_info"):
+                self.read_info_list = second_line[14:].strip().split(',')
+
+            if second_line.startswith("computer_load"):
+                self.read_load_list = second_line[14:].strip().split(',')
 
     def print_json(self, env_value):
         print('{')
@@ -112,24 +175,29 @@ class MissionComputer:
 
     def get_mission_computer_info(self):
         computer_info = {}
-        computer_info['os_name'] = platform.system()
-        computer_info['os_version'] = platform.version()
-        computer_info['cpu_cores'] = os.cpu_count()
-        computer_info['cpu_type'] = platform.processor()
 
-        memory_info = psutil.virtual_memory() # GB 단위
+        for type_name in self.read_info_list:
+            value = self.get_info_by_setting(type_name.strip())
 
-        computer_info['total_memory'] = memory_info.total / (1024 ** 3)  # 바이트 → GB 변환
+            if value != None:
+                computer_info[type_name.strip()] = value
 
         self.print_json(computer_info)
 
+    def get_info_by_setting(self, type_name):
+        if type_name in self.runable:
+            return self.runable[type_name]()
+        
+        return None
+
     def get_mission_computer_load(self):
         usage_info = {}
+        
+        for type_name in self.read_load_list:
+            value = self.get_info_by_setting(type_name.strip())
 
-        memory_info = psutil.virtual_memory() # GB 단위
-
-        usage_info['cpu_usage'] = psutil.cpu_percent(interval=1)
-        usage_info['memory_usage'] = memory_info.percent
+            if value != None:
+                usage_info[type_name.strip()] = value
         
         self.print_json(usage_info)
 
