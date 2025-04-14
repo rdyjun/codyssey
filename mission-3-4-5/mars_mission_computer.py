@@ -174,7 +174,7 @@ class MissionComputer:
         for type_name in self.read_info_list:
             value = self.get_info_by_setting(type_name.strip())
 
-            if value != None:
+            if value is not None:
                 computer_info[type_name.strip()] = value
 
         self.print_json(computer_info)
@@ -191,7 +191,7 @@ class MissionComputer:
         for type_name in self.read_load_list:
             value = self.get_info_by_setting(type_name.strip())
 
-            if value != None:
+            if value is not None:
                 usage_info[type_name.strip()] = value
         
         self.print_json(usage_info)
