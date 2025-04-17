@@ -1,4 +1,3 @@
-import sys
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QGridLayout,
     QLineEdit
@@ -118,4 +117,4 @@ if __name__ == "__main__":
     app = QApplication([])      # PyQT로 GUI를 생성하기 위한 QApplication 객체 생성
     window = CalculatorWindow() # 구현한 GUI 생성
     window.show()               # 생성한 GUI를 화면에 표시
-    sys.exit(app.exec_())       # 프로그램 종료 전까지 계속 실행
+    app.exec_()       # 프로그램 종료 전까지 계속 실행
