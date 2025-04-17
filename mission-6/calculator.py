@@ -6,15 +6,15 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 
-from function_button import ACButton, ChangeSignButton, PercentButton
+from function_button import FunctionButton, ACButton, ChangeSignButton, PercentButton
 from operator_button import (
-    DivisionButton, MultiplicationButton, SubtractionButton,
-    AdditionButton, EqualsButton
+    OperatorButton, DivisionButton, MultiplicationButton,
+    SubtractionButton, AdditionButton, EqualsButton
 )
 from number_button import (
-    ZeroButton, OneButton, TwoButton, ThreeButton,
-    FourButton, FiveButton, SixButton, SevenButton,
-    EightButton, NineButton, DotButton
+    NumberButton, ZeroButton, OneButton, TwoButton, 
+    ThreeButton, FourButton, FiveButton, SixButton,
+    SevenButton, EightButton, NineButton, DotButton
 )
 
 class CalculatorWindow(QMainWindow):
@@ -34,7 +34,7 @@ class CalculatorWindow(QMainWindow):
         central_widget.setLayout(main_layout)               # 중앙 위젯에 레이아웃 설정
 
         # Display
-        self.display = QLineEdit("4,256,545")               # 초기 값 설정
+        self.display = QLineEdit("0")               # 초기 값 설정
         self.display.setAlignment(Qt.AlignRight)            # 값 오른쪽 정렬
         self.display.setReadOnly(True)                      # 읽기 전용으로 설정 (계산기기 때문)
         self.display.setFont(QFont("Arial", 36, QFont.Bold))# 폰트 설정
@@ -68,7 +68,51 @@ class CalculatorWindow(QMainWindow):
         ]
 
         for button in buttons:
+            button.clicked.connect(lambda _, b=button: self.button_click_event(b))
             btn_layout.addWidget(button, button.row, button.column, button.row_span, button.column_span)
+
+    def button_click_event(self, button):
+        if isinstance(button, NumberButton):
+            self.number_click_event(button);
+        
+        if isinstance(button, FunctionButton):
+            self.function_click_event(button)
+
+        if isinstance(button, OperatorButton):
+            self.operator_click_event(button)
+
+    def number_click_event(self, button):
+        display_text = self.display.text()
+
+        if (display_text == '0'):
+            self.display.setText(button.value)
+            return
+
+        if (len(display_text) > 2 and display_text[-2] is not [0-9] and display_text[-1] is 0):
+            self.display.setText(display_text[:-2] + button.value)
+            return
+        
+        self.display.setText(display_text + button.value)
+    
+    def operator_click_event(self, button):
+        display_text = self.display.text()
+
+        if isinstance(button, EqualsButton):
+            try:
+                result = eval(display_text.replace('÷', '/').replace('×', '*'))
+                if result % 1 == 0: # 소수점 제거
+                    result = str(int(result))
+
+                self.display.setText(result)
+            except Exception as e:
+                self.display.setText("연산식 오류: " + str(e))
+            return
+
+        if display_text[-1] in ['+', '-', '*', '/']:
+            self.display.setText(display_text[:-1] + button.value)
+            return
+
+        self.display.setText(display_text + button.value)
 
 if __name__ == "__main__":
     app = QApplication([])      # PyQT로 GUI를 생성하기 위한 QApplication 객체 생성

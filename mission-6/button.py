@@ -11,7 +11,8 @@ class Button(QPushButton):
         self.row_span = row_span
         self.column_span = column_span
         self.color = color
-
+        self.value = text
+        
         # 버튼 스타일 설정
         self.setFont(font)
         self.setStyleSheet(f"""
