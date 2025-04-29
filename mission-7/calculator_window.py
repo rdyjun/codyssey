@@ -40,6 +40,7 @@ class CalculatorWindow(QMainWindow):
         self.display.setReadOnly(True)                      # 읽기 전용으로 설정 (계산기기 때문)
         self.display.setFont(QFont("Arial", 36, QFont.Bold))# 폰트 설정
         self.display.setStyleSheet("background: transparent; color: white; border: none; padding: 10px;")
+        self.display.textChanged.connect(self.adjust_font_size)  # 글자 크기 조절
         main_layout.addWidget(self.display)                 # 레이아웃에 배치
 
         # 버튼 레이아웃
@@ -116,3 +117,14 @@ class CalculatorWindow(QMainWindow):
 
         self.calculator.add_operator(button.value)
         self.display.setText(self.calculator.display())
+
+    def adjust_font_size(self):
+        text_length = len(self.display.text())
+        font = self.display.font()
+        if text_length < 15:
+            font.setPointSize(36)
+        elif text_length < 20:
+            font.setPointSize(24)
+        else:
+            font.setPointSize(16)
+        self.display.setFont(font)
