@@ -50,31 +50,25 @@ class Calculator:
     
     def add(self):
         result = float(self.current) + float(self.operand)
-        if result % 1 == 0:
-            return int(result)
-        
-        return float(result)
+        return self.number_check(result)
 
     def subtract(self):
         result = float(self.current) - float(self.operand)
-        if result % 1 == 0:
-            return int(result)
-        
-        return float(result)
+        return self.number_check(result)
 
     def multiply(self):
         result = float(self.current) * float(self.operand)
-        if result % 1 == 0:
-            return int(result)
-        
-        return float(result)
+        return self.number_check(result)
 
     def divide(self):
         result = float(self.current) / float(self.operand)
-        if result % 1 == 0:
-            return int(result)
+        return self.number_check(result)
+    
+    def number_check(self, number):
+        if number % 1 == 0:
+            return int(number)
         
-        return float(result)
+        return round(number, 5)
     
     def equal(self):
         if self.operator == '+':
@@ -84,7 +78,7 @@ class Calculator:
         if self.operator == '×':
             self.current = str(self.multiply())
         if self.operator == '÷':
-            self.current = str(self.divide())
+            self.current = str(self.divide())        
 
         self.operand = None
         self.operator = None
