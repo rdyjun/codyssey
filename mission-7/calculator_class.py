@@ -46,20 +46,32 @@ class Calculator:
         self.pointer %= 2
     
     def add(self):
-        return int(self.current) + int(self.operand)
-
-    def subtract(self):
-        return int(self.current) - int(self.operand)
-
-    def multiply(self):
-        return int(self.current) * int(self.operand)
-
-    def divide(self):
-        result = int(self.current) / int(self.operand)
+        result = float(self.current) + float(self.operand)
         if result % 1 == 0:
             return int(result)
         
-        return result
+        return float(result)
+
+    def subtract(self):
+        result = float(self.current) - float(self.operand)
+        if result % 1 == 0:
+            return int(result)
+        
+        return float(result)
+
+    def multiply(self):
+        result = float(self.current) * float(self.operand)
+        if result % 1 == 0:
+            return int(result)
+        
+        return float(result)
+
+    def divide(self):
+        result = float(self.current) / float(self.operand)
+        if result % 1 == 0:
+            return int(result)
+        
+        return float(result)
     
     def equal(self):
         print(self.operator)
