@@ -24,13 +24,12 @@ class Calculator:
         return display + self.operand
     
     def add_operator(self, operator):
-        self.operator = operator
-
         # 이미 연산자와 피연산자에 값이 할당된 경우 equal 실행 
         if self.pointer == 1 and self.operator is not None:
             self.equal()
             
         self.operator = operator
+        self.operand = None
         self.pointer = 1
 
     def add_number(self, current, number):
