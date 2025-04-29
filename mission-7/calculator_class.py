@@ -77,7 +77,6 @@ class Calculator:
         return float(result)
     
     def equal(self):
-        print(self.operator)
         if self.operator == '+':
             self.current = str(self.add())
         if self.operator == '-':
