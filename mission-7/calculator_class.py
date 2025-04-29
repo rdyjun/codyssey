@@ -35,6 +35,9 @@ class Calculator:
     def add_number(self, current, number):
         if current == '0' or current == 0 or current is None:
             return number
+        
+        if number == '.' and '.' in current:
+            return current
 
         if (len(current) > 2 and current[-2] is not [0-9] and current[-1] is 0):
             return current[:-2] + number
