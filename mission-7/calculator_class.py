@@ -84,3 +84,9 @@ class Calculator:
             return self.current + self.operator
         
         return self.current + self.operator + self.operand
+    
+    def reset(self):
+        self.current = '0'
+        self.operand = None
+        self.operator = None
+        self.pointer = 0

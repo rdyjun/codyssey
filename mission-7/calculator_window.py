@@ -82,6 +82,11 @@ class CalculatorWindow(QMainWindow):
         if isinstance(button, OperatorButton):
             self.operator_click_event(button)
 
+    def function_click_event(self, button):
+        if isinstance(button, ACButton):
+            self.calculator.reset()
+            self.display.setText('0')
+
     def number_click_event(self, button):
         result = self.calculator.input(button.value)
         self.display.setText(result)
