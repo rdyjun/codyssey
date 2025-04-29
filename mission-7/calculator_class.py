@@ -96,3 +96,16 @@ class Calculator:
             self.current = str(-int(self.current))
         else:
             self.operand = str(-int(self.operand))
+
+    def percent(self):
+        if self.pointer == 0:
+            if self.current == '0' or self.current is None:
+                return
+            
+            self.current = str(int(self.current) / 100)
+            return
+        
+        if self.operand == '0' or self.operand is None:
+            return
+        
+        self.operand = str(int(self.operand) / 100)

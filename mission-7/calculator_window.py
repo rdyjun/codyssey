@@ -91,6 +91,10 @@ class CalculatorWindow(QMainWindow):
             self.calculator.negative_positive()
             self.display.setText(self.calculator.display())
 
+        if isinstance(button, PercentButton):
+            self.calculator.percent()
+            self.display.setText(self.calculator.display())
+
     def number_click_event(self, button):
         result = self.calculator.input(button.value)
         self.display.setText(result)
