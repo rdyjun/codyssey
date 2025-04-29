@@ -90,3 +90,9 @@ class Calculator:
         self.operand = None
         self.operator = None
         self.pointer = 0
+
+    def negative_positive(self):
+        if self.pointer == 0:
+            self.current = str(-int(self.current))
+        else:
+            self.operand = str(-int(self.operand))

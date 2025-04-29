@@ -87,6 +87,10 @@ class CalculatorWindow(QMainWindow):
             self.calculator.reset()
             self.display.setText('0')
 
+        if isinstance(button, ChangeSignButton):
+            self.calculator.negative_positive()
+            self.display.setText(self.calculator.display())
+
     def number_click_event(self, button):
         result = self.calculator.input(button.value)
         self.display.setText(result)
