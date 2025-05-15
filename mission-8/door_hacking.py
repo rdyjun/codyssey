@@ -1,6 +1,5 @@
 import zipfile
 import itertools
-import string
  
 # ZIP 파일 경로
 zip_file_path = 'mission-8/emergency_storage_key.zip'
