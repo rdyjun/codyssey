@@ -5,8 +5,8 @@ zip_file_path = 'mission-8/emergency_storage_key.zip'
 
 # 브루트포스 공격 설정
 characters = 'abcdefghijklmnopqrstuvwxyz0123456789' # 소문자, 숫자
-min_length = 1
-max_length = 10
+min_length = 6
+max_length = 6
 
 def generate_passwords(length, current=''):
     if len(current) == length:
