@@ -2,6 +2,10 @@ import os
 import csv
 import speech_recognition as sr
 
+"""
+javis.py 파일에서 실행해주세요.
+"""
+
 def get_audio_file_list(directory):
     file_list = []
     for file_name in os.listdir(directory):
@@ -49,16 +53,3 @@ def search_keyword_in_csv(directory, keyword):
                 for row in reader:
                     if keyword in row[1]:
                         print(f'[{file_name}] {row[0]}초: {row[1]}')
-
-def main():
-    audio_dir = 'records'
-    print('음성 파일을 처리합니다...')
-    process_audio_files(audio_dir)
-
-    keyword = input('검색할 키워드를 입력하세요(엔터시 종료): ')
-    if keyword:
-        print(f'키워드 "{keyword}" 검색 결과:')
-        search_keyword_in_csv(audio_dir, keyword)
-
-if __name__ == '__main__':
-    main()
