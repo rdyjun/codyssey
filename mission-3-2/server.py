@@ -78,6 +78,11 @@ class ChatServer:
                     if message == '/종료':
                         self.remove_client(client_socket, nickname)
                         break
+
+                    if message.startswith('/귓 '):
+                        split_message = message.split(' ')
+                        self.broadcast_private_message(f'{nickname}님의 귓속말: {split_message[2]}', split_message[1])
+                        break
                     
                     # 메시지 브로드캐스트
                     formatted_message = f'{nickname}> {message}'
@@ -103,6 +108,17 @@ class ChatServer:
                 except Exception as e:
                     print(f'메시지 전송 오류: {e}')
                     self.remove_client(client, 'Unknown')
+    
+    def broadcast_private_message(self, message, recipient_name):
+        try:
+            for client in self.clients:
+                if recipient_name == self.nicknames[self.clients.index(client)]:
+                    recipient_socket = client
+                    recipient_socket.send(message.encode('utf-8'))
+                    break
+        except Exception as e:
+            print(f'메시지 전송 오류: {e}')
+            self.remove_client(client, 'Unknown')
     
     def remove_client(self, client_socket, nickname):
         try:
