@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우주 해적 - Space Pirates</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            margin: 10px 0 0 0;
+            opacity: 0.8;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card h2 {
+            color: #4ecdc4;
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+        
+        .card h3 {
+            color: #ff6b6b;
+            margin-top: 20px;
+        }
+        
+        .pirate-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .pirate-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .pirate-list li:before {
+            content: "⚔️ ";
+            margin-right: 10px;
+        }
+        
+        .ship-specs {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .ship-specs h4 {
+            color: #45b7d1;
+            margin-top: 0;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+        
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.7;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .navigation {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 0 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: background 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🏴‍☠️ 우주 해적단 🏴‍☠️</h1>
+            <p>Space Pirates - 무한한 우주를 누비는 자유로운 영혼들</p>
+        </div>
+        
+        <div class="navigation">
+            <a href="#about" class="nav-link">해적단 소개</a>
+            <a href="#crew" class="nav-link">주요 멤버</a>
+            <a href="#ships" class="nav-link">우주선</a>
+            <a href="#missions" class="nav-link">주요 임무</a>
+        </div>
+        
+        <div class="content">
+            <div class="card" id="about">
+                <h2>🌌 해적단 소개</h2>
+                <p>우주 해적단은 2157년에 설립된 독립적인 우주 탐험가 집단입니다. 우리는 자유로운 영혼으로서 우주의 신비를 탐구하고, 억압받는 자들을 도우며, 진정한 모험을 추구합니다.</p>
+                
+                <h3>우리의 철학</h3>
+                <ul>
+                    <li>자유와 독립을 최우선으로 여긴다</li>
+                    <li>약한 자를 보호하고 강한 자를 견제한다</li>
+                    <li>우주의 신비를 탐구하고 지식을 공유한다</li>
+                    <li>정의를 위해 싸우되, 개인의 자유를 존중한다</li>
+                </ul>
+            </div>
+            
+            <div class="card" id="crew">
+                <h2>👥 주요 멤버</h2>
+                
+                <h3>선장 - 스카이 호크</h3>
+                <p>전 우주군 파일럿 출신으로, 20년간의 우주 경험을 가지고 있습니다. 냉정한 판단력과 따뜻한 마음을 겸비한 리더입니다.</p>
+                
+                <h3>부선장 - 네비게이터 제인</h3>
+                <p>우주 항해의 달인으로, 복잡한 항로도 한눈에 파악하는 천재적인 능력을 가지고 있습니다.</p>
+                
+                <h3>엔지니어 - 기어 박사</h3>
+                <p>우주선 정비와 개조의 전문가. 고장난 장비도 창의적인 방법으로 수리하는 능력을 보유하고 있습니다.</p>
+                
+                <h3>의료관 - 힐러 마리</h3>
+                <p>외계 생명체의 생리학까지 연구한 의료 전문가. 우주에서 발생할 수 있는 모든 질병과 부상을 치료할 수 있습니다.</p>
+            </div>
+            
+            <div class="card" id="ships">
+                <h2>🚀 우주선 함대</h2>
+                
+                <h3>메인 함선 - "자유의 날개"</h3>
+                <div class="ship-specs">
+                    <h4>기술 사양</h4>
+                    <ul>
+                        <li>길이: 150m</li>
+                        <li>최대 속도: 광속의 0.3배</li>
+                        <li>승무원: 25명</li>
+                        <li>무장: 양자 캐논 4문, 미사일 런처 8기</li>
+                        <li>방어막: 양자 차폐막 시스템</li>
+                    </ul>
+                </div>
+                
+                <h3>정찰선 - "스카우트"</h3>
+                <div class="ship-specs">
+                    <h4>기술 사양</h4>
+                    <ul>
+                        <li>길이: 30m</li>
+                        <li>최대 속도: 광속의 0.5배</li>
+                        <li>승무원: 3명</li>
+                        <li>특수 장비: 은신 시스템, 고성능 센서</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card" id="missions">
+                <h2>🎯 주요 임무</h2>
+                
+                <h3>탐험 임무</h3>
+                <p>미지의 행성과 우주 지역을 탐사하여 새로운 자원과 생명체를 발견합니다.</p>
+                
+                <h3>구조 임무</h3>
+                <p>우주에서 조난당한 선박과 승무원들을 구조하고, 위험에 처한 식민지를 보호합니다.</p>
+                
+                <h3>정보 수집</h3>
+                <p>우주 연합의 부패한 관료들과 기업들의 비리를 조사하여 공개합니다.</p>
+                
+                <h3>자유 무역</h3>
+                <p>억압적인 세금과 규제 없이 자유로운 무역을 통해 필요한 물자를 공급합니다.</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <h3>🌟 우주 해적단에 합류하시겠습니까? 🌟</h3>
+            <p>자유로운 영혼을 가진 모든 이들을 환영합니다.</p>
+            <p>연락처: space.pirates@galaxy.com</p>
+            <p>우주 좌표: Alpha Centauri Sector 7-G</p>
+            <p><em>"우주는 우리의 바다, 별들은 우리의 등대"</em></p>
+        </div>
+    </div>
+    
+    <script>
+        // 별 생성 스크립트
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numStars = 100;
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 2 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 1) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // 페이지 로드 시 별 생성
+        window.addEventListener('load', createStars);
+        
+        // 부드러운 스크롤 효과
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
