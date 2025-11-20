@@ -11,8 +11,8 @@ import sys
 # 프로젝트 경로를 sys.path에 추가
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# Import Base from the project's database module and ensure models
-# are imported so that `Base.metadata` contains table definitions.
+# 프로젝트의 `database` 모듈에서 `Base`를 가져오고 `models`를 임포트하여
+# `Base.metadata`에 테이블 정의가 포함되도록 보장한다.
 from database import Base  # noqa: E402
 import models  # noqa: E402,F401
 
@@ -20,10 +20,10 @@ config = context.config
 try:
     fileConfig(config.config_file_name)
 except Exception:
-    # alembic.ini may not contain logging sections in this simplified setup
+    # 단순화된 설정에서는 alembic.ini에 로깅 섹션이 없을 수 있다
     pass
 
-# Ensure sqlalchemy.url is present in config (fallback to local sqlite file)
+# 설정에 `sqlalchemy.url`이 없으면 로컬 SQLite 파일로 대체하도록 설정한다
 if not config.get_main_option('sqlalchemy.url'):
     config.set_main_option('sqlalchemy.url', 'sqlite:///./questions.db')
 

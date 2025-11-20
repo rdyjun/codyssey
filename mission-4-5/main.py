@@ -2,7 +2,8 @@ import os
 import sys
 from typing import List, Dict
 
-# Ensure project dir is on sys.path so imports work when uvicorn reloads subprocesses
+# 프로젝트 디렉터리를 `sys.path`에 추가하여 uvicorn이 서브프로세스를 리로드할 때에도
+# 모듈 임포트가 정상 동작하도록 함
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 from fastapi import Depends, FastAPI, HTTPException, Body

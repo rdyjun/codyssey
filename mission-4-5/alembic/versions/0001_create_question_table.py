@@ -1,4 +1,4 @@
-"""create question table
+"""question 테이블 생성
 
 Revision ID: 0001_create_question_table
 Revises: 
@@ -8,7 +8,7 @@ Create Date: 2025-11-20 00:00:00.000000
 from alembic import op
 import sqlalchemy as sa
 
-# revision identifiers, used by Alembic.
+# 리비전 식별자 — Alembic에서 사용됨
 revision = '0001_create_question_table'
 down_revision = None
 branch_labels = None
