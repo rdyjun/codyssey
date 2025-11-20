@@ -1,0 +1,15 @@
+# mission-4-5 specific ignores
+# runtime logs and pid
+uvicorn.log
+uvicorn.pid
+nohup.out
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# local virtualenv (if created inside folder)
+.venv/
+
+# local DB (keep only if you want to track it)
+questions.db
