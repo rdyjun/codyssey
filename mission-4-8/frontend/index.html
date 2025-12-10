@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>화성 게시판</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Malgun Gothic", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 30px;
+      }
+      h1 {
+        color: #333;
+        margin-bottom: 30px;
+        text-align: center;
+        font-size: 2em;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+        font-weight: bold;
+      }
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+      }
+      input[type="text"]:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+      button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      button:hover {
+        transform: translateY(-2px);
+      }
+      button:active {
+        transform: translateY(0);
+      }
+      .question-list {
+        margin-top: 40px;
+      }
+      .question-item {
+        background: #f8f9fa;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #667eea;
+      }
+      .question-title {
+        font-size: 1.2em;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+      .question-content {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 10px;
+      }
+      .question-date {
+        color: #999;
+        font-size: 0.9em;
+      }
+      .error {
+        color: #e74c3c;
+        padding: 10px;
+        background: #ffe5e5;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        display: none;
+      }
+      .success {
+        color: #27ae60;
+        padding: 10px;
+        background: #d4edda;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🚀 화성 게시판</h1>
+
+      <div class="error" id="errorMsg"></div>
+      <div class="success" id="successMsg"></div>
+
+      <form id="questionForm">
+        <div class="form-group">
+          <label for="subject">제목</label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            placeholder="질문 제목을 입력하세요"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="content">내용</label>
+          <textarea
+            id="content"
+            name="content"
+            placeholder="질문 내용을 입력하세요"
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit">질문 등록</button>
+      </form>
+
+      <div class="question-list">
+        <h2>질문 목록</h2>
+        <div id="questionsList"></div>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE_URL = "http://127.0.0.1:8002/api/question";
+
+      // 질문 목록 불러오기
+      async function loadQuestions() {
+        try {
+          const response = await fetch(API_BASE_URL + "/");
+          if (!response.ok) {
+            throw new Error("질문 목록을 불러오는데 실패했습니다.");
+          }
+          const questions = await response.json();
+          displayQuestions(questions);
+        } catch (error) {
+          showError(error.message);
+        }
+      }
+
+      // 질문 목록 표시
+      function displayQuestions(questions) {
+        const questionsList = document.getElementById("questionsList");
+
+        if (questions.length === 0) {
+          questionsList.innerHTML =
+            '<p style="text-align: center; color: #999;">등록된 질문이 없습니다.</p>';
+          return;
+        }
+
+        questionsList.innerHTML = questions
+          .map(
+            (q) => `
+                <div class="question-item">
+                    <div class="question-title">${escapeHtml(q.subject)}</div>
+                    <div class="question-content">${escapeHtml(q.content)}</div>
+                    <div class="question-date">${formatDate(
+                      q.create_date
+                    )}</div>
+                </div>
+            `
+          )
+          .join("");
+      }
+
+      // 질문 등록
+      document
+        .getElementById("questionForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const subject = document.getElementById("subject").value.trim();
+          const content = document.getElementById("content").value.trim();
+
+          if (!subject || !content) {
+            showError("제목과 내용을 모두 입력해주세요.");
+            return;
+          }
+
+          try {
+            const response = await fetch(API_BASE_URL + "/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ subject, content }),
+            });
+
+            if (!response.ok) {
+              throw new Error("질문 등록에 실패했습니다.");
+            }
+
+            showSuccess("질문이 성공적으로 등록되었습니다!");
+            document.getElementById("questionForm").reset();
+            loadQuestions();
+          } catch (error) {
+            showError(error.message);
+          }
+        });
+
+      // 에러 메시지 표시
+      function showError(message) {
+        const errorMsg = document.getElementById("errorMsg");
+        errorMsg.textContent = message;
+        errorMsg.style.display = "block";
+        setTimeout(() => {
+          errorMsg.style.display = "none";
+        }, 3000);
+      }
+
+      // 성공 메시지 표시
+      function showSuccess(message) {
+        const successMsg = document.getElementById("successMsg");
+        successMsg.textContent = message;
+        successMsg.style.display = "block";
+        setTimeout(() => {
+          successMsg.style.display = "none";
+        }, 3000);
+      }
+
+      // HTML 이스케이프
+      function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // 날짜 포맷
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleString("ko-KR");
+      }
+
+      // 페이지 로드 시 질문 목록 불러오기
+      loadQuestions();
+    </script>
+  </body>
+</html>
